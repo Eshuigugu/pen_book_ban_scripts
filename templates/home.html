@@ -1,0 +1,58 @@
+{% block body %}
+        <div style="display: flex; flex-wrap: wrap">
+            {% for book in books%}
+            <div style="flex-grow: 4;">
+                <table style="border-width: 2px;border-style: solid; max-width: 480px; margin: 5px;">
+                <tbody style="vertical-align: top;">
+                <tr>
+                <td>
+                    <a href="{{book.url}}">
+                        <img style="max-width: 150px;" alt="{{book.title}}" src="{{book.image}}">
+                    </a>
+                </td>
+                <td style="max-width: 300px;">
+                    <a style="font-weight: 700; font-size: 1.25rem; color: inherit; text-decoration: inherit" href="{{book.url}}">{{book.title}}</a>
+                    {% if book.series %}
+                    <p><a style="font-weight: 600;font-size: 1rem; color: inherit;text-decoration: inherit" href="{{book.series.url}}">{{book.series.name}}</a></p>
+                    {% endif %}
+                    {% for author in book.authors%}
+                    <p><a style="font-weight: 400;font-size: 1rem;color: rgb(102 102 102/var(--tw-text-opacity));color: inherit;text-decoration: inherit;" href="{{author.url}}">{{author.name}}</a></p>
+                    {% endfor %}
+                    <p>{{book.bans | string }} bans, {{book.pages}}
+                        <details><summary>Details</summary>
+                            {% for line in book.details %}
+                                <p>{{line}}</p>
+                            {% endfor %}
+                        </details>
+                    </p>
+                    <p>
+                        {% for tag in book.tags %}
+                        <span style="color: rgb(20 125 100);border-width: 2px;border-color: rgb(229 229 229);
+                        border-style: solid;padding: 2px; margin-top: 4px; display: inline-block; border-radius: .125rem;">{{tag}}</span>
+                        {% endfor %}
+                        {% for mood in book.mood %}
+                        <span style="color: rgb(218 18 125);border-width: 2px;border-color: rgb(229 229 229);
+                        border-style: solid;padding: 2px; margin-top: 4px; display: inline-block; border-radius: .125rem;">
+                            {{mood}}</span>
+                        {% endfor %}
+                    </p>
+                </td>
+                <td style="padding: 5px;min-width: 90px;">
+                <p><a href="https://www.myanonamouse.net/tor/browse.php?tor%5Btext%5D=%40author%20{{book.authors[0].name}}%20%40title%20{{book.title}}">Search</a></p>
+                    {% for torrent in book.torrents %}
+                        {% if "mp3" in torrent.filetypes or "m4b" in torrent.filetypes %}
+                            <p style="background: lightgreen;margin: 5px;">
+                        {% else %}
+                            <p style="background: lightblue;margin: 5px;">
+                        {% endif %}
+                            <a href="{{torrent.url}}">{{torrent.filetypes}}</a></p>
+                    {% endfor %}
+
+                </td>
+                </tr>
+                </tbody>
+                </table>
+                </div>
+            {% endfor %}
+            </div>
+{% endblock %}
